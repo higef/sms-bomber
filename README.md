@@ -3,4 +3,4 @@
 
 or with custom message
 
-`docker run --pull always -d -it geph/sms-bomber <you message>`
+`docker run --pull always -d -it geph/sms-bomber <your message>`
