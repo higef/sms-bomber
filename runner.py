@@ -1,3 +1,4 @@
+from http.client import RemoteDisconnected
 import random
 import re
 import textwrap
@@ -11,30 +12,34 @@ import socks, socket
 msg = "Vashy voiny ubivaiut mirnoe naselenie v Ukraine"
 
 def call_me(num):
-	controller.signal(Signal.NEWNYM)
-	time.sleep(controller.get_newnym_wait())
-	current_ip = requests.get(url='http://icanhazip.com/')
-	print(f"Sending to {num} from IP: {current_ip.text}")
+	try:
+		controller.signal(Signal.NEWNYM)
+		time.sleep(controller.get_newnym_wait())
+		current_ip = requests.get(url='http://icanhazip.com/')
+		print(f"Sending to {num} from IP: {current_ip.text}")
 
-	session.head('http://ossinfo.ru/otpravit-sms-na-mts.html')
-	response = session.post(
-		url='http://ossinfo.ru/functions/custom.php',
-		data={
-			"method": "sendSms",
-			"params[message]": msg,
-			"params[number]": f"+{num}",
-			"params[transliterate]": "false"
-		},
-		headers={
-			"Referer": 'http://ossinfo.ru/otpravit-sms-na-mts.html',
-			"X-Requested-With": "XMLHttpRequest"
-		}
-	)
-	print(response.text)
+		session.head('http://ossinfo.ru/otpravit-sms-na-mts.html')
+		response = session.post(
+			url='http://ossinfo.ru/functions/custom.php',
+			data={
+				"method": "sendSms",
+				"params[message]": msg,
+				"params[number]": f"+{num}",
+				"params[transliterate]": "false"
+			},
+			headers={
+				"Referer": 'http://ossinfo.ru/otpravit-sms-na-mts.html',
+				"X-Requested-With": "XMLHttpRequest"
+			}
+		)
+		print(response.text)
+	except Exception as e:
+		print(f"Facing error:\n{e}\nDon't bother unless it's persistent")
 
 
 if len(sys.argv) >= 2:
-  msg = sys.argv[1]
+	if len(sys.argv[1]) >= 3:
+		msg = sys.argv[1]
 
 print(f"Going to spam the following message:\n{msg}")
 
