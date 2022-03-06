@@ -1,2 +1,2 @@
 
-`docker run -d -it geph/sms-bomber`
+`docker run --pull always -d -it geph/sms-bomber`

