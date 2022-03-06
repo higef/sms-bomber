@@ -1,10 +1,10 @@
-from http.client import RemoteDisconnected
 import random
 import re
 import textwrap
 import requests
 import time
 import sys
+import json
 from stem import Signal
 from stem.control import Controller
 import socks, socket
@@ -32,7 +32,7 @@ def call_me(num):
 				"X-Requested-With": "XMLHttpRequest"
 			}
 		)
-		print(response.text)
+		print(json.loads(response.text))
 	except Exception as e:
 		print(f"Facing error:\n{e}\nDon't bother unless it's persistent")
 
