@@ -10,6 +10,7 @@ RUN apk add --no-cache tor bash proxychains-ng \
     && sed -i 's/#quiet_mode/quiet_mode/' /etc/proxychains/proxychains.conf \
     && sed -i 's/#random_chain/random_chain/' /etc/proxychains/proxychains.conf \
     && chmod +x /app/docker-entrypoint.sh  \
-    && chown -R root:root /var/lib/tor
+    && chown -R root:root /var/lib/tor \
+    && pip3 install -r requirements.txt
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
